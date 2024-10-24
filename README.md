@@ -5,7 +5,7 @@ Read Wrangling
 
 ## Introduction
 
-This tutorial covers the usage of the File Operations Script (version 8), a powerful Python tool for splitting and concatenating files with support for multiprocessing and hash calculations. The script provides functionality for:
+This tutorial covers the usage of the File Operations Script (version 11; formerly v8), a powerful Python tool for splitting and concatenating files with support for multiprocessing and hash calculations. The script provides functionality for:
 
 - Splitting large files into smaller chunks
 - Concatenating multiple files
