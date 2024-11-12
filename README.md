@@ -1,16 +1,17 @@
 # read_wrangling
 Read Wrangling
 
-# File Operations Script Tutorial (Version 10)
+# File Operations Script Tutorial (Version 12)
 
 ## Introduction
 
-This tutorial covers the usage of the File Operations Script (version 10; v11 is current as of 2024-10-24), a powerful Python tool for splitting, concatenating, and hashing files with support for multiprocessing. The script provides functionality for:
+This tutorial covers the usage of the File Operations Script (tutorial version 12; "file-operations-csv_2.py" is current as of 2024-11-12), a powerful Python tool for splitting, concatenating, and hashing files with support for multiprocessing. The script provides functionality for:
 
 - Splitting large files into smaller chunks
 - Concatenating multiple files
 - Calculating MD5 and SHA256 hashes (as a standalone operation or combined with split/concatenate)
-- Saving hash metadata
+- Saving results in CSV format
+- Optional individual metadata file generation
 - Utilizing multiprocessing for improved performance
 
 ## Installation
@@ -35,28 +36,43 @@ python file_operations.py [OPTIONS] FILE1 [FILE2 ...]
 - `--split`: Split the input file(s)
 - `--concatenate`: Concatenate the input file(s)
 - `--hash`: Calculate MD5 and SHA256 hashes (can be used alone or with --split/--concatenate)
+- `--metadata`: Generate individual metadata files for each processed file
 - `--chunk-size SIZE`: Specify the size of each chunk when splitting (in bytes)
 - `--num-files N`: Specify the number of files to split into
 - `--output FILE`: Specify the output file for concatenation
-- `--verbose`: Display detailed progress information
+- `--verbose`: Display detailed progress information and CSV-formatted results in console
 - `--processes N`: Specify the number of processes to use for multiprocessing
 
 ## Usage Examples
 
-### 1. Calculating Hashes (Standalone Mode)
+### 1. Basic Hash Calculation
 
-To calculate hashes for multiple files using 10 processes:
+To calculate hashes for multiple files with CSV output only:
 
 ```
-python file_operations.py --hash --processes 10 --verbose file1.dat file2.dat file3.dat
+python file_operations.py --hash --verbose file1.dat file2.dat file3.dat
 ```
 
 This command will:
 - Calculate MD5 and SHA256 hashes for each file in parallel
-- Create hash metadata files for each file
-- Display progress information
+- Generate a consolidated CSV file with all results (`hash_results_TIMESTAMP.csv`)
+- Display progress information and results if verbose is enabled
 
-### 2. Splitting a File
+### 2. Hash Calculation with Individual Metadata Files
+
+To calculate hashes and generate individual metadata files:
+
+```
+python file_operations.py --hash --metadata --processes 10 file1.dat file2.dat file3.dat
+```
+
+This command will:
+- Calculate hashes for all files
+- Generate a consolidated CSV file
+- Create individual metadata files for each processed file
+- Use 10 processes in parallel for faster processing
+
+### 3. Splitting a File with Hashes
 
 To split a large file into 3 parts and calculate hashes:
 
@@ -67,20 +83,14 @@ python file_operations.py --split --num-files 3 --hash --verbose large_file.dat
 This command will:
 - Split `large_file.dat` into 3 roughly equal parts
 - Calculate MD5 and SHA256 hashes for the original file and each part
-- Display progress information
-- Create hash metadata files for each operation
+- Generate a consolidated CSV file with results
+- Display progress information and results if verbose is enabled
 
-### 3. Splitting a File by Chunk Size
-
-To split a file into chunks of 1MB each:
+To also generate individual metadata files for each part:
 
 ```
-python file_operations.py --split --chunk-size 1048576 --verbose large_file.dat
+python file_operations.py --split --num-files 3 --hash --metadata large_file.dat
 ```
-
-This command will:
-- Split `large_file.dat` into chunks of 1MB each
-- Display progress information
 
 ### 4. Concatenating Files
 
@@ -91,78 +101,73 @@ python file_operations.py --concatenate --output combined.dat --hash file1.dat f
 ```
 
 This command will:
-- Combine `file1.dat`, `file2.dat`, and `file3.dat` into a single file named `combined.dat`
+- Combine the input files into `combined.dat`
 - Calculate MD5 and SHA256 hashes for the resulting file
-- Create a hash metadata file for the combined file
+- Include results in the CSV file
 
-### 5. Processing Multiple Files
-
-To calculate hashes for all files in a directory:
+Add `--metadata` to generate an individual metadata file for the combined file:
 
 ```
-python file_operations.py --hash --verbose --processes 8 /path/to/directory/*
+python file_operations.py --concatenate --output combined.dat --hash --metadata file1.dat file2.dat file3.dat
 ```
-
-This command will:
-- Calculate hashes for all files in the specified directory
-- Use 8 processes in parallel for faster processing
-- Display progress information for each file
 
 ## Understanding the Output
 
-When running the script with the `--verbose` option, you'll see detailed information about the operations being performed:
+The script provides two types of output:
 
-1. The number of CPU cores being used
-2. Progress bars for overall file processing
-3. Hash information for original files, split parts, or concatenated files
-4. Names of created metadata files
+1. CSV File Output (Always generated when using --hash):
+   - A file named `hash_results_TIMESTAMP.csv` containing all results
+   - CSV columns: File, Timestamp, MD5, SHA256
 
-Example output for hash calculation:
+2. Individual Metadata Files (Optional with --metadata flag):
+   - Separate .txt files for each processed file
+   - Format: `hash_table_FILENAME_TIMESTAMP.txt`
+
+Example CSV file content:
+```csv
+File,Timestamp,MD5,SHA256
+file1.dat,20241112_134038,3f6d9eb418a4df71b05257d95cc75e75,82533214d86d8ad8118996b4187060481264e9ef8a7938612c92c8dbcb6e1ee1
+file2.dat,20241112_134039,7f6d9eb418a4df71b05257d95cc75e75,92533214d86d8ad8118996b4187060481264e9ef8a7938612c92c8dbcb6e1ee1
+file3.dat,20241112_134040,8f6d9eb418a4df71b05257d95cc75e75,a2533214d86d8ad8118996b4187060481264e9ef8a7938612c92c8dbcb6e1ee1
+```
+
+Example individual metadata file content (when using --metadata):
+```
+File: file1.dat
+Timestamp: 20241112_134038
+MD5: 3f6d9eb418a4df71b05257d95cc75e75
+SHA256: 82533214d86d8ad8118996b4187060481264e9ef8a7938612c92c8dbcb6e1ee1
+```
+
+## Console Output (with --verbose):
 ```
 Using 8 out of 12 available CPU cores
 Processing files: 100%|████████████████████| 3/3 [00:02<00:00,  1.23files/s]
-File: file1.dat
-MD5: 3f6d9eb418a4df71b05257d95cc75e75
-SHA256: 82533214d86d8ad8118996b4187060481264e9ef8a7938612c92c8dbcb6e1ee1
-Metadata: hash_table_file1.dat_20241013_012345.txt
+Results saved to: hash_results_20241112_134038.csv
 
-File: file2.dat
-MD5: 7f6d9eb418a4df71b05257d95cc75e75
-SHA256: 92533214d86d8ad8118996b4187060481264e9ef8a7938612c92c8dbcb6e1ee1
-Metadata: hash_table_file2.dat_20241013_012346.txt
-
-File: file3.dat
-MD5: 8f6d9eb418a4df71b05257d95cc75e75
-SHA256: a2533214d86d8ad8118996b4187060481264e9ef8a7938612c92c8dbcb6e1ee1
-Metadata: hash_table_file3.dat_20241013_012347.txt
+File,MD5,SHA256
+file1.dat,3f6d9eb418a4df71b05257d95cc75e75,82533214d86d8ad8118996b4187060481264e9ef8a7938612c92c8dbcb6e1ee1
+file2.dat,7f6d9eb418a4df71b05257d95cc75e75,92533214d86d8ad8118996b4187060481264e9ef8a7938612c92c8dbcb6e1ee1
+file3.dat,8f6d9eb418a4df71b05257d95cc75e75,a2533214d86d8ad8118996b4187060481264e9ef8a7938612c92c8dbcb6e1ee1
 ```
-
-## Multiprocessing Behavior
-
-The script utilizes multiprocessing in the following ways:
-
-- For hash calculations (standalone or with other operations): Each file is processed in a separate process, allowing for parallel processing of multiple files.
-- For file splitting: The chunks of a single file are processed in parallel.
-- For concatenation: The operation itself is sequential, but if hashing is enabled, the hash calculation of the result is done in a separate process.
-
-By default, the script uses half of the available CPU cores. You can adjust this using the `--processes` option.
 
 ## Tips and Best Practices
 
-1. Use the `--hash` option when data integrity is crucial, either as a standalone operation or combined with split/concatenate.
-2. When splitting very large files, use the `--chunk-size` option to control memory usage.
-3. Use the `--processes` option to optimize performance based on your system's capabilities.
-4. The `--verbose` option is helpful for monitoring progress, especially for large files or batch operations.
-5. When concatenating files, ensure you have enough disk space for the combined file.
-6. For processing multiple files, use wildcard patterns (e.g., `/path/to/directory/*`) to easily include all files in a directory.
+1. Use CSV output (default with --hash) for easy importing into spreadsheets or databases
+2. Use `--metadata` only when individual file records are needed
+3. For batch processing, CSV output is more manageable than individual metadata files
+4. Use `--verbose` to monitor progress and verify results in real-time
+5. When splitting large files, consider using `--chunk-size` to control memory usage
+6. Adjust `--processes` based on your system's capabilities
+7. Use wildcard patterns (e.g., `/path/to/directory/*`) for processing multiple files
 
 ## Troubleshooting
 
-- If you encounter "Out of Memory" errors, try reducing the chunk size or the number of processes.
-- Ensure you have write permissions in the directory where you're running the script.
-- For very large files or numerous small files, consider adjusting the number of processes to balance speed and system resource usage.
-- If processing files on a network drive, be aware that network latency may impact performance.
+- If you encounter "Out of Memory" errors, try reducing the chunk size or number of processes
+- Ensure write permissions in the output directory for both CSV and metadata files
+- For large file sets, consider using CSV output without individual metadata files
+- If processing files on a network drive, be aware that network latency may impact performance
 
 ## Conclusion
 
-This File Operations Script provides a versatile and efficient way to manage large files, split them into manageable chunks, concatenate multiple files, and ensure data integrity through hash calculations. By leveraging multiprocessing, it offers improved performance for handling multiple files or large datasets, making it a valuable tool for various file management and data integrity tasks.
+This File Operations Script provides a streamlined approach to file management tasks with flexible output options. The CSV-first approach with optional metadata files makes it suitable for both interactive use and automated workflows. The multiprocessing capabilities ensure efficient handling of large datasets, while the modular output options allow users to balance between detailed individual records and consolidated reporting.
