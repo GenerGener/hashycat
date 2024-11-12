@@ -1,11 +1,11 @@
 # read_wrangling
-Read Wrangling
+Read Wrangling with hashycat.py
 
 # File Operations Script Tutorial (Version 12)
 
 ## Introduction
 
-This tutorial covers the usage of the File Operations Script (tutorial version 12; "file-operations-csv_2.py" is current as of 2024-11-12), a powerful Python tool for splitting, concatenating, and hashing files with support for multiprocessing. The script provides functionality for:
+This tutorial covers the usage of the File Operations Script (tutorial version 12; "hashycat.py" is current as of 2024-11-12), a powerful Python tool for splitting, concatenating, and hashing files with support for multiprocessing. The script provides functionality for:
 
 - Splitting large files into smaller chunks
 - Concatenating multiple files
@@ -17,7 +17,7 @@ This tutorial covers the usage of the File Operations Script (tutorial version 1
 ## Installation
 
 1. Ensure you have Python 3.6 or later installed on your system.
-2. Save the script as `file_operations.py` in your desired directory.
+2. Save the script as `hashycat.py` in your desired directory.
 3. Install the required `tqdm` library by running:
    ```
    pip install tqdm
@@ -28,7 +28,7 @@ This tutorial covers the usage of the File Operations Script (tutorial version 1
 The script can be run from the command line with various options. Here's the basic structure of a command:
 
 ```
-python file_operations.py [OPTIONS] FILE1 [FILE2 ...]
+python hashycat.py [OPTIONS] FILE1 [FILE2 ...]
 ```
 
 ### Command-line Options
@@ -50,7 +50,7 @@ python file_operations.py [OPTIONS] FILE1 [FILE2 ...]
 To calculate hashes for multiple files with CSV output only:
 
 ```
-python file_operations.py --hash --verbose file1.dat file2.dat file3.dat
+python hashycat.py --hash --verbose file1.dat file2.dat file3.dat
 ```
 
 This command will:
@@ -63,7 +63,7 @@ This command will:
 To calculate hashes and generate individual metadata files:
 
 ```
-python file_operations.py --hash --metadata --processes 10 file1.dat file2.dat file3.dat
+python hashycat.py --hash --metadata --processes 10 file1.dat file2.dat file3.dat
 ```
 
 This command will:
@@ -77,7 +77,7 @@ This command will:
 To split a large file into 3 parts and calculate hashes:
 
 ```
-python file_operations.py --split --num-files 3 --hash --verbose large_file.dat
+python hashycat.py --split --num-files 3 --hash --verbose large_file.dat
 ```
 
 This command will:
@@ -89,7 +89,7 @@ This command will:
 To also generate individual metadata files for each part:
 
 ```
-python file_operations.py --split --num-files 3 --hash --metadata large_file.dat
+python hashycat.py --split --num-files 3 --hash --metadata large_file.dat
 ```
 
 ### 4. Concatenating Files
@@ -97,7 +97,7 @@ python file_operations.py --split --num-files 3 --hash --metadata large_file.dat
 To concatenate multiple files and calculate the hash of the result:
 
 ```
-python file_operations.py --concatenate --output combined.dat --hash file1.dat file2.dat file3.dat
+python hashycat.py --concatenate --output combined.dat --hash file1.dat file2.dat file3.dat
 ```
 
 This command will:
@@ -108,7 +108,7 @@ This command will:
 Add `--metadata` to generate an individual metadata file for the combined file:
 
 ```
-python file_operations.py --concatenate --output combined.dat --hash --metadata file1.dat file2.dat file3.dat
+python hashycat.py --concatenate --output combined.dat --hash --metadata file1.dat file2.dat file3.dat
 ```
 
 ## Understanding the Output
