@@ -170,4 +170,4 @@ file3.dat,8f6d9eb418a4df71b05257d95cc75e75,a2533214d86d8ad8118996b4187060481264e
 
 ## Conclusion
 
-This File Operations Script provides a streamlined approach to file management tasks with flexible output options. The CSV-first approach with optional metadata files makes it suitable for both interactive use and automated workflows. The multiprocessing capabilities ensure efficient handling of large datasets, while the modular output options allow users to balance between detailed individual records and consolidated reporting.
+This file operations "hashycat.py" script provides a streamlined approach to file management tasks with flexible output options. The CSV-first approach with optional metadata files makes it suitable for both interactive use and automated workflows. The multiprocessing capabilities ensure efficient handling of large datasets, while the modular output options allow users to balance between detailed individual records and consolidated reporting.
