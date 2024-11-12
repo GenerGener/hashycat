@@ -1,11 +1,11 @@
 # read_wrangling
-Read Wrangling with hashycat.py
+Read Wrangling with hashycat.py :3
 
-# File Operations Script Tutorial (Version 12)
+# Tutorial (Version 12)
 
 ## Introduction
 
-This tutorial covers the usage of the File Operations Script (tutorial version 12; "hashycat.py" is current as of 2024-11-12), a powerful Python tool for splitting, concatenating, and hashing files with support for multiprocessing. The script provides functionality for:
+This tutorial covers the usage of the file operations "hashycat.py" script (current as of 2024-11-12), a powerful Python tool for splitting, concatenating, and hashing files with support for multiprocessing. The script provides functionality for:
 
 - Splitting large files into smaller chunks
 - Concatenating multiple files
