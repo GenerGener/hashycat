@@ -1,5 +1,4 @@
-# read_wrangling
-Read Wrangling with hashycat.py :3
+# Read Wrangling with hashycat.py :3
 
 # Tutorial (Version 12)
 
