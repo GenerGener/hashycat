@@ -1,8 +1,6 @@
 # Read Wrangling with hashycat.py :3
 
-# Tutorial (Version 12)
-
-## Introduction
+## Introduction/Tutorial (Version 12)
 
 This tutorial covers the usage of the file operations "hashycat.py" script (current as of 2024-11-12), a powerful Python tool for splitting, concatenating, and hashing files with support for multiprocessing. The script provides functionality for:
 
